@@ -1,0 +1,43 @@
+Box2D notes.............
+//create the world 
+b2Vec2 gravity;
+gravity.Set(x,x);
+world = new b2World(gravity);
+//delete world 
+delete world;
+world = NUll;
+
+//let the world run  the function step do the step only do it once in evety timeStep,so you will have to put it in a constant call function (like update ) .and you'd better use the function world->clearForces() so you can clear all the force;
+world->step(float32 timeStep,int32 velocityIteration,int32 position Iteration);
+world->clearForces();
+//all the objects and joints are created by the world ..now is a way to traverse the world
+for(b2Body *body = world->getBodyList();b;b->getNext()){
+    //wake up the objects   
+    b->WakeUp();
+}
+
+//wrong way to traverse and delete the objects in the world
+for(b2Body *b =world->getBodyList();b;b->getNext()){
+      Sprite * role = (Sprite*)b->GetUserData();
+      if(role->isDead())
+      //after this function the b->getNext gonna return the wrong data
+      world->destroyBody(b);
+}
+ 
+// the right way
+b2Body * node = myWorld->GetBodyList(); 
+while (node){
+   b2Body *b_for_delete = node;
+   node = node->getNext();
+   Sprite * role = (Sprite*)b_for_delete->GetUserData();
+      if(role->isDead())
+      world->destroyBody(b);
+}
+
+//shape is for the collision test and Fixtures are for the dynamic physics simulation
+
+//some basic attributes of fixtures
+1.Density //密度 can use this to change the mass,and there is no mass attribute in fixture.
+2.Friction//摩擦系数 between 0~1. friction = sqrtf(shape1->friction * shape2->friction).
+3.Restitution //恢复（弹力）between 0~1. restitution= b2Max(shape1->restitution,shape2->restitution).
+4.Filtering //用于碰撞筛选 划分可以进行碰撞的群体
